@@ -40,7 +40,7 @@ class MarkerController extends Controller
         Marker::create($validatedData);
 
         return redirect()->route('markers.index')
-            ->with('success', 'Marker updated successfully');
+            ->with('success', 'Marker deleted successfully');
     }
 
     /**
