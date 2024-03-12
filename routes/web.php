@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\MarkerController;
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
@@ -44,5 +45,15 @@ Route::post('/markers', [MarkerController::class, 'store'])->name('markers.store
 Route::get('/markers/{id}/edit', [MarkerController::class, 'edit'])->name('markers.edit');
 Route::put('/markers/{id}', [MarkerController::class, 'update'])->name('markers.update');
 Route::delete('/markers/{id}', [MarkerController::class, 'destroy'])->name('markers.destroy');
+
+// Route::get('store', [StoreController::class, 'index'])->name('store.index');
+Route::get('/', [ProductsController::class, 'showProducts']);
+
+Route::get('cart', [ProductsController::class, 'showCartTable']);
+Route::get('add-to-cart/{id}', [ProductsController::class, 'addToCart']);
+
+Route::delete('remove-from-cart', [ProductsController::class, 'removeCartItem']);
+Route::get('clear-cart', [ProductsController::class, 'clearCart']);
+
 
 require __DIR__ . '/auth.php';
