@@ -1,5 +1,18 @@
-@section('content')
-<table id="cart" class="table table-bordered table-hover table-condensed mt-3">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Ralf Shop - Card</title>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        @vite('resources/css/app.css')
+    </head>
+    <body class="antialiased">
+    <table id="cart" class="table table-bordered table-hover table-condensed mt-3">
     <thead>
         <tr>
             <th style="width:50%">Product</th>
@@ -52,30 +65,9 @@
             @endif
     </tfoot>
 
-</table>
-<a href="{{ url('http://127.0.0.1:8000/') }}" class="btn shopping-btn">Continue Shopping</a>
-<a href="" class="btn btn-warning check-btn">Proceed Checkout</a>
-<div class="container products">
-
-    <div class="row">
-
-        @foreach($products as $product)
-        <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="card mb-4">
-                <img src="{{ $product->photo }}" class="card-img-top img-size" alt="{{ $product->name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $product->name }}</h5>
-                    <p class="card-text">{{ \Illuminate\Support\Str::limit(strtolower($product->description), 50) }}
-                    </p>
-                    <p class="card-text"><strong>Price: </strong> ${{ $product->price }}</p>
-                    <a href="{{ url('add-to-cart/'.$product->id) }}" class="btn btn-warning btn-block text-center" role="button">Add to cart</a>
-                </div>
-            </div>
-        </div>
-        @endforeach
-
-    </div>
-
-</div>
-
-@endsection
+  </table>
+  <a href="{{ URL::previous() }}" class="btn shopping-btn">Continue Shopping</a>
+  <a href="" class="btn btn-warning check-btn">Proceed Checkout</a>
+  <script src="{{ asset('js/app.js') }}"></script>
+  </body>
+</html>
