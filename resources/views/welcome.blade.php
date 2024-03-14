@@ -47,14 +47,14 @@
                                   class="w-full aspect-video object-cover rounded"
                                   alt="{{ $product->name }}"
                                 />
-                                <div class="card-body">
-                                  <h5 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">{{ $product->name }}</h5>
-                                  <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                                <div class="card-body text-gray-900 dark:text-white">
+                                  <h5 class="mt-6 text-xl font-semibold">{{ $product->name }}</h5>
+                                  <p class="mt-4 text-sm leading-relaxed">
                                     {{ \Illuminate\Support\Str::limit(strtolower($product->description),
                                     50) }}
                                   </p>
-                                  <p class="card-text">
-                                    <strong>Price: </strong> ${{ $product->price }}
+                                  <p class="mt-6 text-xl font-semibold">
+                                    <strong>Price: </strong> ${{ number_format($product->price,2) }}
                                   </p>
                                   <a
                                     href="javascript:void(0);"
@@ -87,6 +87,6 @@
                 </div>
             </div>
         </div>
-        <script src="{{ asset('js/app.js') }}"></script>
+        @vite(['resources/js/app.js'])
     </body>
 </html>

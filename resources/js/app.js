@@ -6,40 +6,67 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-$(document).ready(function () {
-    $(".add-to-cart-button").on("click", function () {
-        var productId = $(this).data("product-id");
+document.addEventListener("DOMContentLoaded", function () {
+    var addToCartButtons = document.querySelectorAll(".add-to-cart-button");
 
-        $.ajax({
-            type: "GET",
-            url: "/add-to-cart/" + productId,
-            success: function (data) {
-                $("#adding-cart-" + productId).show();
-                $("#add-cart-btn-" + productId).hide();
-            },
-            error: function (error) {
-                console.error("Error adding to cart:", error);
-            },
+    addToCartButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            var productId = button.dataset.productId;
+
+            fetch("/add-to-cart/" + productId)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    document.getElementById(
+                        "adding-cart-" + productId
+                    ).style.display = "block";
+                    document.getElementById(
+                        "add-cart-btn-" + productId
+                    ).style.display = "none";
+                })
+                .catch((error) => {
+                    console.error("Error adding to cart:", error);
+                });
         });
     });
 });
 
-$(".remove-from-cart").click(function (e) {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+    var removeFromCartButtons = document.querySelectorAll(".remove-from-cart");
 
-    var ele = $(this);
+    removeFromCartButtons.forEach(function (button) {
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
 
-    if (confirm("Are you sure want to remove product from the cart.")) {
-        $.ajax({
-            url: '{{ url("remove-from-cart") }}',
-            method: "DELETE",
-            data: {
-                _token: "{{ csrf_token() }}",
-                id: ele.attr("data-id"),
-            },
-            success: function (response) {
-                window.location.reload();
-            },
+            var ele = e.target;
+
+            if (confirm("Are you sure want to remove product from the cart.")) {
+                fetch("/remove-from-cart", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                    body: JSON.stringify({
+                        id: ele.getAttribute("data-id"),
+                    }),
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        window.location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error removing from cart:", error);
+                    });
+            }
         });
-    }
+    });
 });
