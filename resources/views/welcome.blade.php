@@ -56,13 +56,20 @@
                                   <p class="mt-6 text-xl font-semibold">
                                     <strong>Price: </strong> ${{ number_format($product->price,2) }}
                                   </p>
-                                  <a
-                                    href="javascript:void(0);"
+                                  <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary" type="button" id="minus-btn">-</button>
+                                    </div>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" value="1">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="plus-btn">+</button>
+                                    </div>
+                                </div>
+                                <a href="javascript:void(0);"
                                     data-product-id="{{ $product->id }}"
                                     id="add-cart-btn-{{ $product->id }}"
                                     class="btn btn-warning btn-block text-center add-cart-btn add-to-cart-button"
-                                    >Add to cart</a
-                                  >
+                                    >Add to cart</a>
                                   <span
                                     id="adding-cart-{{ $product->id }}"
                                     class="btn btn-warning btn-block text-center added-msg"

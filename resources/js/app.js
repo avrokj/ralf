@@ -7,11 +7,12 @@ window.Alpine = Alpine;
 Alpine.start();
 
 document.addEventListener("DOMContentLoaded", function () {
-    var addToCartButtons = document.querySelectorAll(".add-to-cart-button");
+    const addToCartButtons = document.querySelectorAll(".add-to-cart-button");
+    const cartCountElement = document.querySelector(".cart-count");
 
     addToCartButtons.forEach(function (button) {
         button.addEventListener("click", function () {
-            var productId = button.dataset.productId;
+            const productId = button.dataset.productId;
 
             fetch("/add-to-cart/" + productId)
                 .then((response) => {
@@ -27,6 +28,21 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById(
                         "add-cart-btn-" + productId
                     ).style.display = "none";
+
+                    // Update cart count
+                    fetch("/get-cart-count")
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error("Network response was not ok");
+                            }
+                            return response.json();
+                        })
+                        .then((cartCount) => {
+                            cartCountElement.textContent = cartCount;
+                        })
+                        .catch((error) => {
+                            console.error("Error getting cart count:", error);
+                        });
                 })
                 .catch((error) => {
                     console.error("Error adding to cart:", error);
@@ -36,13 +52,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    var removeFromCartButtons = document.querySelectorAll(".remove-from-cart");
+    const removeFromCartButtons =
+        document.querySelectorAll(".remove-from-cart");
 
     removeFromCartButtons.forEach(function (button) {
         button.addEventListener("click", function (e) {
             e.preventDefault();
 
-            var ele = e.target;
+            const ele = e.target;
 
             if (confirm("Are you sure want to remove product from the cart.")) {
                 fetch("/remove-from-cart", {
@@ -68,5 +85,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
             }
         });
+    });
+});
+
+// Button
+
+$(document).ready(function () {
+    $("#plus-btn").click(function () {
+        $("#quantity").val(parseInt($("#quantity").val()) + 1);
+    });
+
+    $("#minus-btn").click(function () {
+        var currentValue = parseInt($("#quantity").val());
+        if (currentValue > 1) {
+            $("#quantity").val(currentValue - 1);
+        }
     });
 });

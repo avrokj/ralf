@@ -11,7 +11,7 @@
               <div class="p-6 text-gray-900">
             <h1>Current Weather in {{ $weatherData['name'] }}</h1>
             <p>Description: {{ $weatherData['weather'][0]['description'] }}</p>
-            <p>Temperature: {{ $weatherData['main']['temp'] }} &#8451; </p>  
+            <p>Temperature: {{ round($weatherData['main']['temp'], 0) }} &#8451; </p>  
           </div>
       </div>
     </div>
