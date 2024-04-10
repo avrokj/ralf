@@ -3,16 +3,18 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Ralf Shop</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        @vite('resources/css/app.css')
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="antialiased">
+    <body class="font-sans text-gray-900 antialiased">
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
             @if (Route::has('login'))
                 <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
@@ -60,18 +62,18 @@
                                     <div class="input-group-prepend">
                                         <button class="btn btn-outline-secondary" type="button" id="minus-btn">-</button>
                                     </div>
-                                    <input type="number" class="form-control" id="quantity" name="quantity" value="1">
+                                    <input type="number" class="form-control quantity-input" id="quantity" name="quantity" value="1">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="button" id="plus-btn">+</button>
                                     </div>
                                 </div>
                                 <a href="javascript:void(0);"
                                     data-product-id="{{ $product->id }}"
-                                    id="add-cart-btn-{{ $product->id }}"
+                                    id="add-cart-btn"
                                     class="btn btn-warning btn-block text-center add-cart-btn add-to-cart-button"
                                     >Add to cart</a>
                                   <span
-                                    id="adding-cart-{{ $product->id }}"
+                                    id="adding-cart"
                                     class="btn btn-warning btn-block text-center added-msg"
                                     style="display: none"
                                     >Added.</span
@@ -96,4 +98,34 @@
         </div>
         @vite(['resources/js/app.js'])
     </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var plusBtns = document.querySelectorAll('.plus-btn');
+            var minusBtns = document.querySelectorAll('.minus-btn');
+
+            plusBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var quantityInput = btn.parentNode.querySelector('.quantity-input');
+                    var currentValue = parseInt(quantityInput.value);
+                    if (!isNaN(currentValue)) {
+                        quantityInput.value = currentValue + 1;
+                    } else {
+                        quantityInput.value = 1; // Set default value to 1 if input is not numeric
+                    }
+                });
+            });
+
+            minusBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var quantityInput = btn.parentNode.querySelector('.quantity-input');
+                    var currentValue = parseInt(quantityInput.value);
+                    if (!isNaN(currentValue) && currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    } else {
+                        quantityInput.value = 1; // Set default value to 1 if input is not numeric or <= 1
+                    }
+                });
+            });
+        });
+    </script>
 </html>
