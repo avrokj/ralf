@@ -4,6 +4,7 @@ use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\MarkerController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShopapiController;
 use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,13 @@ Route::get('add-to-cart/{id}', [ProductsController::class, 'addToCart']);
 
 Route::delete('remove-from-cart', [ProductsController::class, 'removeCartItem']);
 Route::get('clear-cart', [ProductsController::class, 'clearCart']);
+
+Route::get('/shopapis', [ShopapiController::class, 'index'])->name('shopapis.index');
+Route::get('/shopapis/create', [ShopapiController::class, 'create'])->name('shopapis.create');
+Route::post('/shopapis', [ShopapiController::class, 'store'])->name('shopapis.store');
+Route::get('/shopapi/{id}/edit', [ShopapiController::class, 'edit'])->name('shopapis.edit');
+Route::put('/shopapi/{id}', [ShopapiController::class, 'update'])->name('shopapis.update');
+Route::delete('/shopapi/{id}', [ShopapiController::class, 'destroy'])->name('shopapis.destroy');
 
 
 require __DIR__ . '/auth.php';

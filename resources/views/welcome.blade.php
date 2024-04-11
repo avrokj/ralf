@@ -58,26 +58,25 @@
                                   <p class="mt-6 text-xl font-semibold">
                                     <strong>Price: </strong> ${{ number_format($product->price,2) }}
                                   </p>
-                                  <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary" type="button" id="minus-btn">-</button>
+                                  <div class="flex justify-between input-group mb-3">
+                                    <div class="custom-number-input h-10 w-32">
+                                        <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
+                                          <button data-action="decrement" class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                                            <span class="m-auto text-2xl font-thin">−</span>
+                                          </button>
+                                          <input type="number" min="1" max="100" class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none" name="quantity" value="1"></input>
+                                        <button data-action="increment" class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                                          <span class="m-auto text-2xl font-thin">+</span>
+                                        </button>
+                                      </div>
                                     </div>
-                                    <input type="number" class="form-control quantity-input" id="quantity" name="quantity" value="1">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" id="plus-btn">+</button>
+                                    <div>                                    
+                                        <a href="javascript:void(0);" data-product-id="{{ $product->id }}" id="add-cart-btn"
+                                            class="inline-flex items-center p-4 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 add-cart-btn add-to-cart-button"
+                                        >Add to cart</a>
+                                        <span id="adding-cart" class="btn btn-warning btn-block text-center added-msg" style="display: none">Added.</span>
                                     </div>
                                 </div>
-                                <a href="javascript:void(0);"
-                                    data-product-id="{{ $product->id }}"
-                                    id="add-cart-btn"
-                                    class="btn btn-warning btn-block text-center add-cart-btn add-to-cart-button"
-                                    >Add to cart</a>
-                                  <span
-                                    id="adding-cart"
-                                    class="btn btn-warning btn-block text-center added-msg"
-                                    style="display: none"
-                                    >Added.</span
-                                  >
                                 </div>
                             </div>
                         </div>
@@ -99,33 +98,62 @@
         @vite(['resources/js/app.js'])
     </body>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var plusBtns = document.querySelectorAll('.plus-btn');
-            var minusBtns = document.querySelectorAll('.minus-btn');
+        function decrement(e) {
+            const btn = e.target.parentNode.parentElement.querySelector(
+                'button[data-action="decrement"]'
+            );
+            const target = btn.nextElementSibling;
+            let value = Number(target.value);
+            if (value > 1) { // Ensure the value does not go below 1
+                value--;
+                target.value = value;
+                updateQuantity(target); // Update quantity input field
+            }
+        }
 
-            plusBtns.forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    var quantityInput = btn.parentNode.querySelector('.quantity-input');
-                    var currentValue = parseInt(quantityInput.value);
-                    if (!isNaN(currentValue)) {
-                        quantityInput.value = currentValue + 1;
-                    } else {
-                        quantityInput.value = 1; // Set default value to 1 if input is not numeric
-                    }
-                });
-            });
+        function increment(e) {
+            const btn = e.target.parentNode.parentElement.querySelector(
+                'button[data-action="increment"]'
+            );
+            const target = btn.previousElementSibling;
+            let value = Number(target.value);
+            if (value < 100) { // Ensure the value does not exceed 100
+                value++;
+                target.value = value;
+                updateQuantity(target); // Update quantity input field
+            }
+        }
 
-            minusBtns.forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    var quantityInput = btn.parentNode.querySelector('.quantity-input');
-                    var currentValue = parseInt(quantityInput.value);
-                    if (!isNaN(currentValue) && currentValue > 1) {
-                        quantityInput.value = currentValue - 1;
-                    } else {
-                        quantityInput.value = 1; // Set default value to 1 if input is not numeric or <= 1
-                    }
-                });
-            });
+        function updateQuantity(inputField) {
+            const productId = inputField.dataset.productId;
+            const quantityInput = document.querySelector(`input[data-product-id="${productId}"]`);
+            if (quantityInput) {
+                quantityInput.value = inputField.value;
+            }
+        }
+
+        const decrementButtons = document.querySelectorAll(
+            `button[data-action="decrement"]`
+        );
+
+        const incrementButtons = document.querySelectorAll(
+            `button[data-action="increment"]`
+        );
+
+        decrementButtons.forEach(btn => {
+            btn.addEventListener("click", decrement);
+        });
+
+        incrementButtons.forEach(btn => {
+            btn.addEventListener("click", increment);
+        });
+
+        const addToCartButton = document.getElementById('add-cart-btn');
+        addToCartButton.addEventListener('click', function(e) {
+            const productId = e.target.dataset.productId;
+            const quantityInput = document.querySelector(`input[data-product-id="${productId}"]`);
+            const quantity = quantityInput ? quantityInput.value : 1; // Default to 1 if quantity input not found
+            // Perform add to cart action here with productId and quantity
         });
     </script>
 </html>
