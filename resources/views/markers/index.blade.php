@@ -142,5 +142,5 @@
         });
     }
   </script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('MAP_API_KEY') }}&loading=async&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.map.key') }}&loading=async&callback=initMap"></script>
 </x-app-layout>
