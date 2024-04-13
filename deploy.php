@@ -11,7 +11,6 @@ set('http_user', 'virt118413');
 set('keep_releases', 2);
 
 host('ta22korva.itmajakas.ee')
-    ->stage('production')
     ->setHostname('ta22korva.itmajakas.ee')
     ->set('http_user', 'virt118413')
     ->set('deploy_path', '~/domeenid/www.ta22korva.itmajakas.ee/hajusrakendus')
@@ -43,10 +42,7 @@ task('deploy', [
     'artisan:cache:clear'
 ]);
 
-task('reload:php-fpm', function () {
-    run('sudo /usr/sbin/service php8-fpm reload');
-});
 
 // Hooks
 
-after('deploy:failed', 'deploy:unlock', 'reload:php-fpm');
+after('deploy:failed', 'deploy:unlock');
