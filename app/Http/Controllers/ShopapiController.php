@@ -14,14 +14,8 @@ class ShopapiController extends Controller
      */
     public function index()
     {
-        //return view('shopapis.index');
-        return view('shopapis.index', [
-            /* 'shopapis' => Shopapi::all() */
-            'shopapis' => Shopapi::orderBy('title')->paginate(20)
-            /* 'shopapis' => DB::table('shopapis')->orderBy('title')->paginate(20) */
-        ]);
-        // return Shopapi::all(); // kuvab kõik
-        // return Shopapi::paginate(10); // anna lehest 10 tk
+        $shopApis = ShopApi::all();
+        return response()->json($shopApis);
     }
 
     /**

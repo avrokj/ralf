@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\MarkerController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopapiController;
 use App\Http\Controllers\WeatherController;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,12 +59,29 @@ Route::get('add-to-cart/{id}', [ProductsController::class, 'addToCart']);
 Route::delete('remove-from-cart', [ProductsController::class, 'removeCartItem']);
 Route::get('clear-cart', [ProductsController::class, 'clearCart']);
 
-Route::get('/shopapis', [ShopapiController::class, 'index'])->name('shopapis.index');
-Route::get('/shopapis/create', [ShopapiController::class, 'create'])->name('shopapis.create');
-Route::post('/shopapis', [ShopapiController::class, 'store'])->name('shopapis.store');
-Route::get('/shopapi/{id}/edit', [ShopapiController::class, 'edit'])->name('shopapis.edit');
-Route::put('/shopapi/{id}', [ShopapiController::class, 'update'])->name('shopapis.update');
-Route::delete('/shopapi/{id}', [ShopapiController::class, 'destroy'])->name('shopapis.destroy');
+Route::get('/shopapi', [ShopapiController::class, 'index'])->name('shopapi.index');
+Route::get('/shopapi/create', [ShopapiController::class, 'create'])->name('shopapi.create');
+Route::post('/shopapi', [ShopapiController::class, 'store'])->name('shopapi.store');
+Route::get('/shopapi/{id}/edit', [ShopapiController::class, 'edit'])->name('shopapi.edit');
+Route::put('/shopapi/{id}', [ShopapiController::class, 'update'])->name('shopapi.update');
+Route::delete('/shopapi/{id}', [ShopapiController::class, 'destroy'])->name('shopapi.destroy');
+
+
+
+Route::get('/records', [ApiController::class, 'index'])->name('api.index');
+
+// Route::get('/show-api', function () {
+//     return match (request('name')) {
+//         'Ralf' => Cache::remember('movies', now()->addHour(), fn () =>
+//         Http::get('https://hajus.ta19heinsoo.itmajakas.ee/api/movies')->json()),
+//         'Liis' => Cache::remember('tools', now()->addHour(), fn () =>
+//         Http::get('https://hajusrakendus.ta22alber.itmajakas.ee/tools')->json()),
+//         'Mari-Liis' => Cache::remember('makeup', now()->addHour(), fn () =>
+//         Http::get('https://ralf.ta22sink.itmajakas.ee/api/makeup')->json()),
+//         default => Cache::remember('records', now()->addHour(), fn () =>
+//         Http::get('https://hajusrakendus.ta22maarma.itmajakas.ee/api/records')->json())
+//     };
+// });
 
 
 require __DIR__ . '/auth.php';
