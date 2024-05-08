@@ -19,7 +19,14 @@
                     <p>Pressure: {{ $weatherData['main']['pressure'] }} hPa</p>
                     <p>Humidity: {{ $weatherData['main']['humidity'] }} %</p>
                     <p>Windspeed: {{ round($weatherData['wind']['speed'],1) }} m/s</p>
-                    <p class="pb-4">Wind degree: {{ $weatherData['wind']['deg'] }}</p>
+                    @php
+                        function degreeToDirection($degree) {
+                            $directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']; // https://uni.edu/storm/Wind%20Direction%20slide.pdf
+                            $index = round(($degree % 360) / 22.5);
+                            return $directions[$index];
+                        }
+                    @endphp
+                    <p class="pb-4">Wind degree: {{ degreeToDirection($weatherData['wind']['deg']) }}</p>
                     <p>Sunrise: {{ Carbon\Carbon::createFromTimestamp($weatherData['sys']['sunrise'], 'UTC')->setTimezone('Europe/Tallinn')->format('H:i:s') }}</p>
                     <p class="pb-4">Sunset: {{ Carbon\Carbon::createFromTimestamp($weatherData['sys']['sunset'], 'UTC')->setTimezone('Europe/Tallinn')->format('H:i:s') }}</p>
                     <p><small>Data updated at: {{ $cachedAt->setTimezone('Europe/Tallinn')->format('Y-m-d H:i:s') }}</small></p>
