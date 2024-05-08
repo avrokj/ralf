@@ -99,7 +99,7 @@
                         @endforeach
                     </div>
                     @else
-                    <p class="italic text-sm p">No comments yet.</p>
+                    <p class="italic text-sm pt-2">No comments yet.</p>
                     @endif
         
                     {{-- Form to add new comment --}}
