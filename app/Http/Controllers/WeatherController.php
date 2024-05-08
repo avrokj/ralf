@@ -26,12 +26,12 @@ class WeatherController extends Controller
         $apiUrl = "http://api.openweathermap.org/data/2.5/weather?q=Kuressaare&units=metric&appid={$apiKey}";
 
         try {
-            $response = $client->get($apiUrl); // Make a GET request to the OpenWeather API
+            $response = $client->get($apiUrl); // Make a GET request to the API
 
             $data = json_decode($response->getBody(), true); // Get the response body as an array
 
             $cachedAt = Carbon::now();
-            Cache::put('weather_data', ['data' => $data, 'cached_at' => $cachedAt], now()->addHours(4));
+            Cache::put('weather_data', ['data' => $data, 'cached_at' => $cachedAt], now()->addHours(2));
 
             return view('weather', ['weatherData' => $data, 'cachedAt' => $cachedAt]);
         } catch (\Exception $e) {
