@@ -7,6 +7,7 @@ use App\Http\Controllers\MarkerController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopapiController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -54,7 +55,7 @@ Route::get('/markers/{id}/edit', [MarkerController::class, 'edit'])->name('marke
 Route::put('/markers/{id}', [MarkerController::class, 'update'])->name('markers.update');
 Route::delete('/markers/{id}', [MarkerController::class, 'destroy'])->name('markers.destroy');
 
-// Route::get('store', [StoreController::class, 'index'])->name('store.index');
+Route::get('/store', [StoreController::class, 'index'])->name('store.index');
 Route::get('/', [ProductsController::class, 'showProducts']);
 
 Route::get('cart', [ProductsController::class, 'showCartTable']);

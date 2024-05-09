@@ -15,6 +15,21 @@
                     <p>Feels like: {{ round($weatherData['main']['feels_like'], 0) }} &#8451; </p>
                     <p>Min temp.: {{ round($weatherData['main']['temp_min'], 0) }} &#8451; </p>
                     <p class="pb-4">Max temp.: {{ round($weatherData['main']['temp_max'], 0) }} &#8451; </p>
+
+                    <p>Cloudiness: {{ $weatherData['clouds']['all'] }} %</p>                    
+                    <p>Rain 1h: 
+                        @if(isset($weatherData['rain']['1h']))
+                            {{ $weatherData['rain']['1h'] }}
+                        @else
+                            0
+                        @endif mm</p>                    
+                    <p class="pb-4">Snow 1h: 
+                        @if(isset($weatherData['snow']['1h']))
+                            {{ $weatherData['snow']['1h'] }}
+                        @else
+                            0
+                        @endif mm</p>
+
                     <p>Visibility: {{ $weatherData['visibility']/1000.0 }} km</p>
                     <p>Pressure: {{ $weatherData['main']['pressure'] }} hPa</p>
                     <p>Humidity: {{ $weatherData['main']['humidity'] }} %</p>
@@ -27,6 +42,7 @@
                         }
                     @endphp
                     <p class="pb-4">Wind degree: {{ degreeToDirection($weatherData['wind']['deg']) }}</p>
+
                     <p>Sunrise: {{ Carbon\Carbon::createFromTimestamp($weatherData['sys']['sunrise'], 'UTC')->setTimezone('Europe/Tallinn')->format('H:i:s') }}</p>
                     <p class="pb-4">Sunset: {{ Carbon\Carbon::createFromTimestamp($weatherData['sys']['sunset'], 'UTC')->setTimezone('Europe/Tallinn')->format('H:i:s') }}</p>
                     <p><small>Data updated at: {{ $cachedAt->setTimezone('Europe/Tallinn')->format('Y-m-d H:i:s') }}</small></p>

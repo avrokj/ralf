@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 
 class WeatherController extends Controller
@@ -22,14 +21,36 @@ class WeatherController extends Controller
         $apiUrl = "http://api.openweathermap.org/data/2.5/weather?q=Kuressaare&units=metric&appid={$apiKey}";
 
         try {
-            $response = Http::get($apiUrl); // Make a GET request to the API
+            $curl = curl_init();
 
-            $data = $response->json(); // Get the response body as JSON
+            curl_setopt_array($curl, [
+                CURLOPT_URL => $apiUrl,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                ],
+            ]);
 
-            $cachedAt = Carbon::now();
-            Cache::put('weather_data', ['data' => $data, 'cached_at' => $cachedAt], now()->addHours(2));
+            $response = curl_exec($curl);
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-            return view('weather', ['weatherData' => $data, 'cachedAt' => $cachedAt]);
+            curl_close($curl);
+
+            if ($httpCode >= 200 && $httpCode < 300) {
+                $data = json_decode($response, true);
+
+                $cachedAt = Carbon::now();
+                Cache::put('weather_data', ['data' => $data, 'cached_at' => $cachedAt], now()->addHours(2));
+
+                return view('weather', ['weatherData' => $data, 'cachedAt' => $cachedAt]);
+            } else {
+                throw new \Exception('Failed to fetch weather data. HTTP code: ' . $httpCode);
+            }
         } catch (\Exception $e) {
             return view('api_error', ['error' => $e->getMessage()]);
         }
