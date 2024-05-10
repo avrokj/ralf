@@ -55,7 +55,8 @@ Route::get('/markers/{id}/edit', [MarkerController::class, 'edit'])->name('marke
 Route::put('/markers/{id}', [MarkerController::class, 'update'])->name('markers.update');
 Route::delete('/markers/{id}', [MarkerController::class, 'destroy'])->name('markers.destroy');
 
-Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+Route::resource('/store', StoreController::class);
+Route::put('/store/{product}', [StoreController::class, 'update'])->name('store.update');
 Route::get('/', [ProductsController::class, 'showProducts']);
 
 Route::get('cart', [ProductsController::class, 'showCartTable']);
@@ -71,22 +72,9 @@ Route::get('/shopapi/{id}/edit', [ShopapiController::class, 'edit'])->name('shop
 Route::put('/shopapi/{id}', [ShopapiController::class, 'update'])->name('shopapi.update');
 Route::delete('/shopapi/{id}', [ShopapiController::class, 'destroy'])->name('shopapi.destroy');
 
-
-
-Route::get('/records', [ApiController::class, 'index'])->name('api.index');
-
-// Route::get('/show-api', function () {
-//     return match (request('name')) {
-//         'Ralf' => Cache::remember('movies', now()->addHour(), fn () =>
-//         Http::get('https://hajus.ta19heinsoo.itmajakas.ee/api/movies')->json()),
-//         'Liis' => Cache::remember('tools', now()->addHour(), fn () =>
-//         Http::get('https://hajusrakendus.ta22alber.itmajakas.ee/tools')->json()),
-//         'Mari-Liis' => Cache::remember('makeup', now()->addHour(), fn () =>
-//         Http::get('https://ralf.ta22sink.itmajakas.ee/api/makeup')->json()),
-//         default => Cache::remember('records', now()->addHour(), fn () =>
-//         Http::get('https://hajusrakendus.ta22maarma.itmajakas.ee/api/records')->json())
-//     };
-// });
-
+Route::get('/api', [ApiController::class, 'index'])->name('api.index');
+Route::get('/api/records', [ApiController::class, 'records'])->name('api.records');
+Route::get('/api/movies', [ApiController::class, 'movies'])->name('api.movies');
+Route::get('/api/makeup', [ApiController::class, 'makeup'])->name('api.makeup');
 
 require __DIR__ . '/auth.php';

@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <a href="/api" class="border-b-2 border-indigo-400 px-4"> {{__('My Shop') }}</a>
-            <a href="/api/records" class="px-4">{{ __('Records') }}</a>
+            <a href="/api" class="px-4"> {{__('My Shop') }}</a>
+            <a href="/api/records" class="border-b-2 border-indigo-400 px-4">{{ __('Records') }}</a>
             <a href="/api/movies" class="px-4">{{ __('Movies') }}</a>
             <a href="/api/makeup" class="px-4">{{ __('Make Up') }}</a>
         </h2>
@@ -13,11 +13,12 @@
                 <div class="p-6 text-gray-900 grid grid-cols-3 gap-4">
                 @foreach ($products as $product)
                     <div class="bg-slate-50 shadow-sm sm:rounded-lg hover:shadow-md">
-                        <img src="{{ $product['image_path'] }}" alt="{{ $product['name'] }}" class="sm:rounded-lg w-full aspect-square">
+                        <img src="{{ $product['image'] }}" alt="{{ $product['name'] }}" class="sm:rounded-lg w-full aspect-square">
                         <div class="text-center p-4">
                             <h2 class="font-semibold text-2xl">{{ $product['name'] }}</h2>
-                            <p>Artist: {{ $product['description'] }}</p>
-                            <p class=" font-semibold text-xl">{{ round($product['price'],2) }} €</p>
+                            <p>Artist: {{ $product['author'] }}</p>
+                            <p>Tracks: {{ $product['tracks'] }}</p>
+                            <p class=" font-semibold text-xl">{{ $product['price'] }} €</p>
                         </div>
                     </div>
                 @endforeach

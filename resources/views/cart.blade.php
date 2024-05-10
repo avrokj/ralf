@@ -12,75 +12,88 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         @vite('resources/css/app.css')
     </head>
-    <body>
+    <body class="font-sans text-gray-900 antialiased">
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white p-4">
-            <table id="cart" class="table-auto p-6 text-gray-900 dark:text-white bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-            <thead>
-                <tr>
-                    <th style="w-7/12">Product</th>
-                    <th style="w-3/12">Quantity</th>
-                    <th style="w-2/12" class="text-center">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
+            
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+              <div class="p-6 text-gray-900 flex-grow overflow-auto">
+                <div class="">
+                    <h2 class="font-semibold text-xl leading-tight">
+                        {{ __('Cart') }}
+                    </h2>
+                    <table class="relative w-full rounded-lg my-8">            
+                    <thead class="bg-neutral-100">
+                        <tr>
+                        <th class="text-left py-2">Image</th>
+                        <th class="text-left py-2">Name</th>
+                        <th class="text-left py-2">Qty</th>
+                        <th class="text-left py-2">Price</th>
+                        <th class="text-left py-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                <?php $total = 0 ?>
+                        <?php $total = 0 ?>
 
-                @if(session('cart'))
-                @foreach(session('cart') as $id => $details)
+                        @if(session('cart'))
+                        @foreach(session('cart') as $id => $details)
 
-                <?php $total += $details['price'] * $details['quantity'] ?>
+                        <?php $total += $details['price'] * $details['quantity'] ?>
 
-                <tr>
-                    <td data-th="Product">
-                        <div class="row">
-                            <div class="col-span-3 sm:col-span-3 sm:hidden"><img src="{{ $details['photo'] }}" class="w-12 h-12" />
+                        <tr class="even:bg-gray-50 odd:bg-white py-2">
+                            <td >
+                                <img src="{{ $details['photo'] }}" class="w-12 h-12" />
+                            </td>
+                            <td>
+                                {{ $details['name'] }}
+                            </td>
+                            <td>
+                                <div class="custom-number-input h-10 w-32">
+                                    <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
+                                    <button data-action="decrement" class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                                        <span class="m-auto text-2xl font-thin">−</span>
+                                    </button>
+                                    <input type="number" min="0" max="100" class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none" name="quantity" value="{{ $details['quantity'] }}"></input>
+                                    <button data-action="increment" class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                                    <span class="m-auto text-2xl font-thin">+</span>
+                                    </button>
+                                </div>
+                                </div>
+                            </td>
+                            <td data-th="Subtotal" class="text-center">{{ $details['price'] * $details['quantity'] }} €</td>
+                            <td>
+                                <x-danger-button onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('x') }}
+                                  </x-danger-button>
+                            </td>
+                        </tr>
 
-                            </div>
+                        @endforeach
+                        @endif
 
-                            <div class="col-span-9 sm:col-span-9">
-                                <p class="nomargin">{{ $details['name'] }}</p>
-                                <p class="remove-from-cart cart-delete" data-id="{{ $id }}" title="Delete">Remove</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td data-th="Quantity">
-                        <div class="custom-number-input h-10 w-32">
-                            <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
-                              <button data-action="decrement" class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
-                                <span class="m-auto text-2xl font-thin">−</span>
-                              </button>
-                              <input type="number" min="0" max="100" class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none" name="quantity" value="{{ $details['quantity'] }}"></input>
-                            <button data-action="increment" class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
-                              <span class="m-auto text-2xl font-thin">+</span>
-                            </button>
-                          </div>
-                        </div>
-                    </td>
-                    <td data-th="Subtotal" class="text-center">${{ $details['price'] * $details['quantity'] }}</td>
-                </tr>
+                    </tbody>
+                    <tfoot>
+                        @if(!empty($details))
+                        <tr class="visible-xs">
+                            <td class="text-right" colspan="3"><strong>Total: </strong></td>
+                            <td class="text-center">{{ $total }} €</td>
+                        </tr>
+                        @else
+                        <tr>
+                            <td class="text-center" colspan="4">Your Cart is Empty.....</td>
+                        <tr>
+                            @endif
+                    </tfoot>
 
-                @endforeach
-                @endif
-
-            </tbody>
-            <tfoot>
-                @if(!empty($details))
-                <tr class="visible-xs">
-                    <td class="text-right" colspan="2"><strong>Total</strong></td>
-                    <td class="text-center"> ${{ $total }}</td>
-                </tr>
-                @else
-                <tr>
-                    <td class="text-center" colspan="3">Your Cart is Empty.....</td>
-                <tr>
-                    @endif
-            </tfoot>
-
-        </table>
+                </table>
+            </div>
+            <div class="flex justify-between">
+                <a href="{{ URL::previous() }}" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Continue Shopping</a>
+                <a href="" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Proceed Checkout</a>
+            </div>
+        </div>
     </div>
-  <a href="{{ URL::previous() }}" class="btn shopping-btn">Continue Shopping</a>
-  <a href="" class="btn btn-warning check-btn">Proceed Checkout</a>
   @vite(['resources/js/app.js'])
   </body>
 </html>

@@ -73,7 +73,7 @@
                                     <span class="text-gray-800">{{ $comment->user->name }}</span>
                                     <small class="ml-2 text-sm text-gray-600">{{ $comment->created_at->setTimezone('Europe/Tallinn')->format('Y-m-d H:i:s') }}</small>
                                 </div>
-                                    @if ($chirp->user->is(auth()->user()))
+                                    @if ($chirp->user->is(auth()->user()) && (auth()->user()->isAdmin))
                                         <x-dropdown>
                                             <x-slot name="trigger">
                                                 <button>

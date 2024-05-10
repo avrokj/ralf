@@ -41,46 +41,43 @@
 
                 <div class="mt-16">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                        @if(!empty($products)) @foreach($products as $product)
-                        <div class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                            <div>
-                                <img
-                                  src="{{ $product->image_path }}"
-                                  class="w-full aspect-video object-cover rounded"
-                                  alt="{{ $product->name }}"
-                                />
-                                <div class="card-body text-gray-900 dark:text-white">
-                                  <h5 class="mt-6 text-xl font-semibold">{{ $product->name }}</h5>
-                                  <p class="mt-4 text-sm leading-relaxed">
-                                    {{ \Illuminate\Support\Str::limit(strtolower($product->description),
-                                    50) }}
-                                  </p>
-                                  <p class="mt-6 text-xl font-semibold">
-                                    <strong>Price: </strong> ${{ number_format($product->price,2) }}
-                                  </p>
-                                  <div class="flex justify-between input-group mb-3">
-                                    <div class="custom-number-input h-10 w-32">
-                                        <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
-                                          <button data-action="decrement" class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
-                                            <span class="m-auto text-2xl font-thin">−</span>
-                                          </button>
-                                          <input type="number" min="1" max="100" class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none" name="quantity" value="1"></input>
-                                        <button data-action="increment" class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
-                                          <span class="m-auto text-2xl font-thin">+</span>
-                                        </button>
-                                      </div>
-                                    </div>
-                                    <div>                                    
-                                        <a href="javascript:void(0);" data-product-id="{{ $product->id }}" id="add-cart-btn"
-                                            class="inline-flex items-center p-4 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 add-cart-btn add-to-cart-button"
-                                        >Add to cart</a>
-                                        <span id="adding-cart" class="btn btn-warning btn-block text-center added-msg" style="display: none">Added.</span>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach @endif                        
+                        @if(!empty($products))
+@foreach($products as $product)
+<div class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
+    <div>
+        <img src="{{ $product->image_path }}" class="w-full aspect-video object-cover rounded" alt="{{ $product->name }}" />
+        <div class="card-body text-gray-900 dark:text-white">
+            <h5 class="mt-6 text-xl font-semibold">{{ $product->name }}</h5>
+            <p class="mt-4 text-sm leading-relaxed">
+                {{ \Illuminate\Support\Str::limit(strtolower($product->description), 50) }}
+            </p>
+            <p class="mt-6 text-xl font-semibold">
+                <strong>Price: </strong> {{ number_format($product->price,2) }} €
+            </p>
+            <div class="flex justify-between input-group mb-3">
+                <div class="custom-number-input h-10 w-32">
+                    <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
+                        <button data-action="decrement" class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                            <span class="m-auto text-2xl font-thin">−</span>
+                        </button>
+                        <input type="number" min="1" max="100" class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700  outline-none quantity-input" name="quantity" value="1" data-product-id="{{ $product->id }}"></input>
+                        <button data-action="increment" class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                            <span class="m-auto text-2xl font-thin">+</span>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <a href="javascript:void(0);" data-product-id="{{ $product->id }}" class="add-to-cart-button inline-flex items-center p-4 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 add-cart-btn">
+                        Add to cart
+                    </a>
+                    <span class="btn btn-warning btn-block text-center added-msg" style="display: none">Added.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+@endif                       
                     </div>
                 </div>
 
@@ -98,62 +95,36 @@
         @vite(['resources/js/app.js'])
     </body>
     <script>
-        function decrement(e) {
-            const btn = e.target.parentNode.parentElement.querySelector(
-                'button[data-action="decrement"]'
-            );
-            const target = btn.nextElementSibling;
-            let value = Number(target.value);
-            if (value > 1) { // Ensure the value does not go below 1
-                value--;
-                target.value = value;
-                updateQuantity(target); // Update quantity input field
-            }
+        // Increment/decrement quantity
+$('.custom-number-input button').click(function() {
+    var $button = $(this);
+    var oldValue = $button.parent().find('input').val();
+    var productId = $button.closest('.custom-number-input').find('input').attr('data-product-id');
+
+    if ($button.data('action') === 'increment') {
+        var newVal = parseFloat(oldValue) + 1;
+    } else {
+        // Don't allow decrementing below 1
+        if (oldValue > 1) {
+            var newVal = parseFloat(oldValue) - 1;
+        } else {
+            newVal = 1;
         }
+    }
 
-        function increment(e) {
-            const btn = e.target.parentNode.parentElement.querySelector(
-                'button[data-action="increment"]'
-            );
-            const target = btn.previousElementSibling;
-            let value = Number(target.value);
-            if (value < 100) { // Ensure the value does not exceed 100
-                value++;
-                target.value = value;
-                updateQuantity(target); // Update quantity input field
-            }
-        }
+    // Update input value
+    $button.parent().find('input').val(newVal);
 
-        function updateQuantity(inputField) {
-            const productId = inputField.dataset.productId;
-            const quantityInput = document.querySelector(`input[data-product-id="${productId}"]`);
-            if (quantityInput) {
-                quantityInput.value = inputField.value;
-            }
-        }
+    // Update cart button data-product-id
+    $button.closest('.custom-number-input').find('input').attr('data-product-id', productId);
+});
 
-        const decrementButtons = document.querySelectorAll(
-            `button[data-action="decrement"]`
-        );
-
-        const incrementButtons = document.querySelectorAll(
-            `button[data-action="increment"]`
-        );
-
-        decrementButtons.forEach(btn => {
-            btn.addEventListener("click", decrement);
-        });
-
-        incrementButtons.forEach(btn => {
-            btn.addEventListener("click", increment);
-        });
-
-        const addToCartButton = document.getElementById('add-cart-btn');
-        addToCartButton.addEventListener('click', function(e) {
-            const productId = e.target.dataset.productId;
-            const quantityInput = document.querySelector(`input[data-product-id="${productId}"]`);
-            const quantity = quantityInput ? quantityInput.value : 1; // Default to 1 if quantity input not found
-            // Perform add to cart action here with productId and quantity
-        });
+// Add to cart button click
+$('.add-to-cart-button').click(function() {
+    var productId = $(this).attr('data-product-id');
+    var quantity = $(this).closest('.input-group').find('.quantity-input').val();
+    // Perform add to cart operation with productId and quantity
+    // Show added message or update cart icon, etc.
+});
     </script>
 </html>

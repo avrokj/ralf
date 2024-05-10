@@ -12,9 +12,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment): RedirectResponse
     {
-        // Add authorization logic if required
-
-        $comment->delete();
+        $this->authorize('delete', $comment);
 
         return back()->with('success', 'Comment deleted successfully.');
     }

@@ -42,3 +42,12 @@ Route::get('records', function () {
 
     return Cache::remember('my-request-' . $limit, now()->addHour(), fn () => GardenTool::limit($limit)->get());
 });
+
+Route::get('movies', function () {
+    return Http::get('https://hajus.ta19heinsoo.itmajakas.ee/api/movies')->json();
+    if ($limit = request('limit')) {
+        return Cache::remember('my-request-' . $limit, now()->addHour(), fn () => GardenTool::limit($limit)->get());
+    }
+
+    return Cache::remember('my-request-' . $limit, now()->addHour(), fn () => GardenTool::limit($limit)->get());
+});

@@ -20,7 +20,7 @@
             50) }}
           </p>
           <p class="card-text">
-            <strong>Price: </strong> ${{ $product->price }}
+            <strong>Price: </strong> {{ $product->price }} €
           </p>
           <a
             href="javascript:void(0);"
