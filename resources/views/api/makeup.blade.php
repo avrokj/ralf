@@ -13,7 +13,7 @@
                 <div class="p-6 text-gray-900 grid grid-cols-3 gap-4">
                 @foreach ($products as $product)
                     <div class="bg-slate-50 shadow-sm sm:rounded-lg hover:shadow-md">
-                        <img src="{{ $product['title'] }}" alt="{{ $product['title'] }}" class="sm:rounded-lg w-full aspect-square">
+                        <img src="https://ralf.ta22sink.itmajakas.ee/images/products/{{ $product['image'] }}" alt="{{ $product['title'] }}" class="sm:rounded-lg w-full aspect-square object-cover">
                         <div class="text-center p-4">
                             <h2 class="font-semibold text-2xl">{{ $product['title'] }}</h2>
                             <p>Brand: {{ $product['brand'] }}</p>
