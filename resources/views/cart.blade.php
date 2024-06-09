@@ -29,68 +29,77 @@
                         <th class="text-left py-2">Name</th>
                         <th class="text-left py-2">Qty</th>
                         <th class="text-left py-2">Price</th>
+                        <th class="text-left py-2">Total</th>
                         <th class="text-left py-2"></th>
                         </tr>
                     </thead>
                     <tbody>
-
                         <?php $total = 0 ?>
-
-                        @if(session('cart'))
                         @foreach(session('cart') as $id => $details)
 
-                        <?php $total += $details['price'] * $details['quantity'] ?>
+                            <?php $total += $details['price'] * $details['quantity'] ?>
 
-                        <tr class="even:bg-gray-50 odd:bg-white py-2">
-                            <td >
-                                <img src="{{ $details['photo'] }}" class="w-12 h-12" />
-                            </td>
-                            <td>
-                                {{ $details['name'] }}
-                            </td>
-                            <td>
-                                <div class="custom-number-input h-10 w-32">
-                                    <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
-                                    <button data-action="decrement" class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
-                                        <span class="m-auto text-2xl font-thin">−</span>
-                                    </button>
-                                    <input type="number" min="0" max="100" class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none" name="quantity" value="{{ $details['quantity'] }}"></input>
-                                    <button data-action="increment" class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
-                                    <span class="m-auto text-2xl font-thin">+</span>
-                                    </button>
-                                </div>
-                                </div>
-                            </td>
-                            <td data-th="Subtotal" class="text-center">{{ $details['price'] * $details['quantity'] }} €</td>
-                            <td>
-                                <x-danger-button onclick="event.preventDefault(); this.closest('form').submit();">
-                                    {{ __('x') }}
-                                  </x-danger-button>
-                            </td>
-                        </tr>
-
+                            <tr class="even:bg-gray-50 odd:bg-white py-2" data-product-id="{{ $id }}">
+                                <td class="pr-2">
+                                    <img src="{{ $details['image_path'] }}" class="w-12 h-12 rounded-md" />
+                                </td>
+                                <td class="pr-2">
+                                    {{ $details['name'] }}
+                                </td>
+                                <td class="pr-2">
+                                    <form action="{{ route('cart.update', $id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="flex gap-1">
+                                            <input type="number" name="quantity" value="{{ $details['quantity'] }}" min="1" max="100" class="rounded-md h-8 w-16 outline-none focus:outline-none text-center font-semibold text-md md:text-basecursor-default flex items-center outline-none quantity-input">
+                                            <x-secondary-button type="submit" class="!px-1 py-1">
+                                                {{ __('Update') }}
+                                            </x-secondary-button>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td class="pr-4">
+                                    {{ $details['price'] }}
+                                </td>
+                                <td class="text-center subtotal pr-4">
+                                    {{ $details['price'] * $details['quantity'] }} €
+                                </td>
+                                <td>
+                                    <form action="{{ route('cart.destroy', $id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-danger-button type="submit" title="{{ __('Remove') }}">
+                                            {{ __('X') }}
+                                        </x-danger-button>
+                                    </form>
+                                </td>
+                            </tr>
                         @endforeach
-                        @endif
 
                     </tbody>
                     <tfoot>
-                        @if(!empty($details))
+                    @if($total > 0)
                         <tr class="visible-xs">
-                            <td class="text-right" colspan="3"><strong>Total: </strong></td>
-                            <td class="text-center">{{ $total }} €</td>
+                            <td class="text-right" colspan="4"><strong>Total: </strong></td>
+                            <td class="text-center total">{{ $total }} €</td>
+                            <td></td>
                         </tr>
-                        @else
+                    @else
                         <tr>
-                            <td class="text-center" colspan="4">Your Cart is Empty.....</td>
+                            <td class="text-center" colspan="5">Your Cart is Empty.....</td>
                         <tr>
-                            @endif
+                    @endif
                     </tfoot>
-
                 </table>
+
             </div>
             <div class="flex justify-between">
-                <a href="{{ URL::previous() }}" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Continue Shopping</a>
-                <a href="" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Proceed Checkout</a>
+                <a href="../" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Continue Shopping</a>
+                <form action="{{ route('checkout.checkout') }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Proceed to Payment</button>
+                </form>
             </div>
         </div>
     </div>

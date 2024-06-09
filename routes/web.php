@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MarkerController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopapiController;
@@ -56,14 +58,22 @@ Route::put('/markers/{id}', [MarkerController::class, 'update'])->name('markers.
 Route::delete('/markers/{id}', [MarkerController::class, 'destroy'])->name('markers.destroy');
 
 Route::resource('/store', StoreController::class);
-Route::put('/store/{product}', [StoreController::class, 'update'])->name('store.update');
+Route::put('/store/{id}', [StoreController::class, 'update'])->name('store.update');
+
 Route::get('/', [ProductsController::class, 'showProducts']);
 
-Route::get('cart', [ProductsController::class, 'showCartTable']);
-Route::get('add-to-cart/{id}', [ProductsController::class, 'addToCart']);
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
-Route::delete('remove-from-cart', [ProductsController::class, 'removeCartItem']);
-Route::get('clear-cart', [ProductsController::class, 'clearCart']);
+Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
+Route::get('/payment', function () {
+    return view('products.payment');
+})->name('payment');
+Route::get('/confirmation', function () {
+    return view('products.confirmation');
+})->name('confirmation');
 
 Route::get('/shopapi', [ShopapiController::class, 'index'])->name('shopapi.index');
 Route::get('/shopapi/create', [ShopapiController::class, 'create'])->name('shopapi.create');
@@ -76,5 +86,12 @@ Route::get('/api', [ApiController::class, 'index'])->name('api.index');
 Route::get('/api/records', [ApiController::class, 'records'])->name('api.records');
 Route::get('/api/movies', [ApiController::class, 'movies'])->name('api.movies');
 Route::get('/api/makeup', [ApiController::class, 'makeup'])->name('api.makeup');
+
+Route::prefix('checkout')->name('checkout.')->group(function () {
+    Route::get('/', [PaymentController::class, 'index'])->name('index');
+    Route::post('/sessions', [PaymentController::class, 'checkout'])->name('checkout');
+    Route::get('/success', [PaymentController::class, 'success'])->name('success');
+    Route::get('/cancel', [PaymentController::class, 'cancel'])->name('cancel');
+});
 
 require __DIR__ . '/auth.php';

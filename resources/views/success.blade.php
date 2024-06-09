@@ -40,37 +40,15 @@
                 </div>
 
                 <div class="mt-16">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                        @if(!empty($products))
-                        @foreach($products as $product)
-                        <div class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                            <div>
-                                <img src="{{ $product->image_path }}" class="w-full aspect-video object-cover rounded" alt="{{ $product->name }}" />
-                                <div class="card-body text-gray-900 dark:text-white">
-                                    <h5 class="mt-6 text-xl font-semibold">{{ $product->name }}</h5>
-                                    <p class="mt-4 text-sm leading-relaxed">
-                                        {{ \Illuminate\Support\Str::limit(strtolower($product->description), 50) }}
-                                    </p>
-                                    <p class="mt-6 text-xl font-semibold">
-                                        <strong>Price: </strong> {{ number_format($product->price,2) }} €
-                                    </p>
-                                    <div class="flex justify-between input-group mb-3">
-                                        <form action="{{ route('cart.add') }}" method="POST" class="flex justify-between items-center w-full">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <div class="h-8 w-32">
-                                                <input type="number" min="1" max="100" class="rounded-md h-8 outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700  outline-none quantity-input" name="quantity" value="1"></input>
-                                            </div>
-                                            <div>
-                                                <x-primary-button>{{ __('Add to cart') }}</x-primary-button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="flex flex-col justify-center items-center">
+                        <h1 class="mt-6 text-xl font-semibold text-green-600">
+                            {{ __('Payment successful!') }}
+                        </h1>
+                        <div class="flex justify-center mt-6">
+                            <a href="../" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                {{ __('Continue Shopping') }}
+                            </a>                            
                         </div>
-                        @endforeach
-                        @endif                       
                     </div>
                 </div>
 
@@ -86,5 +64,5 @@
             </div>
         </div>
         @vite(['resources/js/app.js'])
-    </body>    
+    </body>
 </html>

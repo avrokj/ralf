@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
 {
@@ -29,9 +30,15 @@ class StoreController extends Controller
         ]);
     }
 
-    public function edit(Product $product): View
+    public function edit($id): View
     {
-        return view('store.edit', compact('product'));
+        $product = Product::find($id);
+        if ($product) {
+            return view('store.edit', ['product' => $product]);
+        } else {
+            // Handle the case where the product doesn't exist
+            return redirect()->back()->withErrors('Product not found.');
+        }
     }
 
     /**
@@ -43,20 +50,35 @@ class StoreController extends Controller
             'name' => 'required|string|max:255',
             'image_path' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'price' => ['required', 'regex:/^\d+(,\d$|,\d{2})?$/i'],
-            'stock_saldo' => 'required|string|max:45'
+            'price' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
+            'stock_saldo' => 'required|string|max:999'
         ]);
 
-        // Update the product with validated data
-        $product->update($validated);
+        Log::info('Validated data:', $validated);
 
-        // Check for errors
-        if ($product->errors()->any()) {
-            // Handle errors, such as redirecting back with errors
-            return redirect()->back()->withErrors($product->errors())->withInput();
+        // Assign values to product attributes
+        $product->name = $validated['name'];
+        $product->image_path = $validated['image_path'];
+        $product->description = $validated['description'];
+        $product->price = $validated['price'];
+        $product->stock_saldo = $validated['stock_saldo'];
+
+        // Save the product
+        if ($product->save()) {
+            Log::info('Product saved successfully.');
+        } else {
+            Log::error('Product could not be saved.');
         }
 
-        // Redirect to the show route for the product
-        return redirect()->route('products.show', $product);
+        // Redirect to the index route for the products
+        return redirect()->route('store.index')->with('success', 'Product updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->back()->with('message', 'Product deleted!');
     }
 }
